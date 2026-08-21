@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { DOMAIN_LABEL, RELATED_ARTICLES } from '../../consts';
+import { DOMAIN_LABEL, RELATED_ARTICLES, withBase } from '../../consts';
 import { publishedArticles, relatedArticles } from '../../lib/content';
 
 export async function getStaticPaths() {
@@ -26,8 +26,8 @@ const dateStr = article.data.date.toISOString().slice(0, 10);
       <h1>{article.data.title}</h1>
       <p class="article-meta">
         <time datetime={dateStr}>{dateStr}</time>
-        {article.data.topics.map((tid) => <a class="tag" href={`/topics/${tid}`}>{tid}</a>)}
-        {article.data.tags.map((t) => <a class="tag" href={`/tags/${t}`}>#{t}</a>)}
+        {article.data.topics.map((tid) => <a class="tag" href={withBase(`/topics/${tid}`)}>{tid}</a>)}
+        {article.data.tags.map((t) => <a class="tag" href={withBase(`/tags/${t}`)}>#{t}</a>)}
       </p>
     </header>
     <div class="article-prose">
@@ -37,7 +37,7 @@ const dateStr = article.data.date.toISOString().slice(0, 10);
       <footer>
         <h2>相关文章</h2>
         <ul>
-          {related.map((r) => <li><a href={`/articles/${r.id}`}>{r.data.title}</a></li>)}
+          {related.map((r) => <li><a href={withBase(`/articles/${r.id}`)}>{r.data.title}</a></li>)}
         </ul>
       </footer>
     )}

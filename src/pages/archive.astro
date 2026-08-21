@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../consts';
 import { archiveGroups } from '../lib/content';
 
 const articles = await getCollection('articles');
@@ -15,7 +16,7 @@ const groups = archiveGroups(articles);
         <ul>
           {group.articles.map((a) => (
             <li>
-              <a href={`/articles/${a.id}`}>{a.data.title}</a>
+              <a href={withBase(`/articles/${a.id}`)}>{a.data.title}</a>
               {' — '}
               <time datetime={a.data.date.toISOString().slice(0, 10)}>
                 {a.data.date.toISOString().slice(0, 10)}

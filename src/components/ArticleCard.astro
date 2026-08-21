@@ -1,6 +1,6 @@
 ---
 import type { ArticleLike } from '../lib/content';
-import { DOMAIN_LABEL } from '../consts';
+import { DOMAIN_LABEL, withBase } from '../consts';
 
 type Props = {
   article: ArticleLike;
@@ -10,7 +10,7 @@ const { article } = Astro.props;
 const dateStr = article.data.date.toISOString().slice(0, 10);
 ---
 <article class="card">
-  <h3><a href={`/articles/${article.id}`}>{article.data.title}</a></h3>
+  <h3><a href={withBase(`/articles/${article.id}`)}>{article.data.title}</a></h3>
   <p>{article.data.summary}</p>
   <p class="card-meta">
     <span class="domain-badge">{DOMAIN_LABEL[article.data.domain]}</span>

@@ -1,6 +1,6 @@
 ---
 import type { TopicLike } from '../lib/content';
-import { DOMAIN_LABEL } from '../consts';
+import { DOMAIN_LABEL, withBase } from '../consts';
 
 type Props = {
   topic: TopicLike;
@@ -9,7 +9,7 @@ type Props = {
 const { topic } = Astro.props;
 ---
 <article class="card">
-  <h3><a href={`/topics/${topic.id}`}>{topic.data.title}</a></h3>
+  <h3><a href={withBase(`/topics/${topic.id}`)}>{topic.data.title}</a></h3>
   <p>{topic.data.summary}</p>
   <p class="card-meta">
     <span class="domain-badge">{DOMAIN_LABEL[topic.data.domain]}</span>

@@ -1,17 +1,17 @@
 ---
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, withBase } from '../consts';
 
 const navLinks = [
-  { href: '/ai', label: 'AI' },
-  { href: '/english', label: '英语' },
-  { href: '/growth', label: '成长' },
-  { href: '/topics', label: '专题' },
-  { href: '/search', label: '搜索' },
+  { href: withBase('/ai'), label: 'AI' },
+  { href: withBase('/english'), label: '英语' },
+  { href: withBase('/growth'), label: '成长' },
+  { href: withBase('/topics'), label: '专题' },
+  { href: withBase('/search'), label: '搜索' },
 ];
 ---
 <header class="site-header">
   <div class="container site-header-inner">
-    <a class="brand" href="/">{SITE_TITLE}</a>
+    <a class="brand" href={withBase('/')}>{SITE_TITLE}</a>
     <button
       type="button"
       class="nav-toggle"

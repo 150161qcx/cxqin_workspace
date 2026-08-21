@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
-import { DOMAIN_LABEL } from '../../consts';
+import { DOMAIN_LABEL, withBase } from '../../consts';
 import { articlesForTopic } from '../../lib/content';
 
 export async function getStaticPaths() {
@@ -35,8 +35,8 @@ const dateStr = topic.data.updated.toISOString().slice(0, 10);
       </div>
     ) : (
       <p class="empty">
-        该专题暂无文章。<a href={`/${topic.data.domain}`}>去{DOMAIN_LABEL[topic.data.domain]}专区看看</a>，或
-        <a href="/topics">浏览全部专题</a>。
+        该专题暂无文章。<a href={withBase(`/${topic.data.domain}`)}>去{DOMAIN_LABEL[topic.data.domain]}专区看看</a>，或
+        <a href={withBase('/topics')}>浏览全部专题</a>。
       </p>
     )}
   </section>

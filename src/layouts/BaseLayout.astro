@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
+import { withBase } from '../consts';
 
 type Props = {
   title: string;
@@ -16,7 +17,7 @@ const { title, description, lang = 'zh' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description ?? ''} />
     <title>{title}</title>
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
   </head>
   <body>
     <SiteHeader />
@@ -24,7 +25,7 @@ const { title, description, lang = 'zh' } = Astro.props;
       <slot />
     </main>
     <footer class="container">
-      <p>© 知识台 · <a href="/about">关于</a></p>
+      <p>© 知识台 · <a href={withBase('/about')}>关于</a></p>
     </footer>
   </body>
 </html>

@@ -1,26 +1,45 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, withBase } from '../consts';
+
+const pagefindBundle = withBase('/pagefind/');
+const siteBase = withBase('/');
+const knowledgeMapHref = withBase('/knowledge-map');
 ---
 <BaseLayout title={`搜索 · ${SITE_TITLE}`} description="全文搜索知识台内容">
   <h1>搜索</h1>
   <div id="search"></div>
   <p class="empty-note" style="margin-top:1rem">
-    搜索不到想看的？去 <a href="/knowledge-map">知识地图浏览专题</a>。
+    搜索不到想看的？去 <a href={knowledgeMapHref}>知识地图浏览专题</a>。
   </p>
 
-  <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
-  <script is:inline src="/pagefind/pagefind-ui.js"></script>
-  <script is:inline>
+  <link href={`${pagefindBundle}pagefind-ui.css`} rel="stylesheet" />
+  <script is:inline define:vars={{ pagefindBundle, siteBase }}>
     window.addEventListener('DOMContentLoaded', function () {
-      if (window.PagefindUI) {
-        new PagefindUI({ element: '#search', showSubResults: true });
-      } else {
+      var script = document.createElement('script');
+      script.src = pagefindBundle + 'pagefind-ui.js';
+      script.onload = function () {
+        if (window.PagefindUI) {
+          new PagefindUI({
+            element: '#search',
+            showSubResults: true,
+            bundlePath: pagefindBundle,
+            baseUrl: siteBase,
+          });
+        } else {
+          var note = document.createElement('p');
+          note.className = 'empty';
+          note.textContent = '搜索索引未生成：本地请先运行 npm run build && npm run preview 验证搜索。';
+          document.getElementById('search').appendChild(note);
+        }
+      };
+      script.onerror = function () {
         var note = document.createElement('p');
         note.className = 'empty';
         note.textContent = '搜索索引未生成：本地请先运行 npm run build && npm run preview 验证搜索。';
         document.getElementById('search').appendChild(note);
-      }
+      };
+      document.body.appendChild(script);
     });
   </script>
 </BaseLayout>

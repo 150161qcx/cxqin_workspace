@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  // 部署前请替换为实际的 GitHub Pages URL（如 https://<user>.github.io/<repo>/）
-  site: 'https://example.com',
+  // GitHub Pages 项目站：https://150161qcx.github.io/cxqin_workspace/
+  site: 'https://150161qcx.github.io',
+  base: '/cxqin_workspace',
   output: 'static',
 });
