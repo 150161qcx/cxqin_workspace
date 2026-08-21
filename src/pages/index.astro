@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import TopicCard from '../components/TopicCard.astro';
+import {
+  HOME_HOT_TOPICS,
+  HOME_LATEST_COUNT,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+} from '../consts';
+import { assertTopicsExist, hotTopics, pickInsight, publishedArticles } from '../lib/content';
+
+const articles = await getCollection('articles');
+const topics = await getCollection('topics');
+
+assertTopicsExist(articles, new Set(topics.map((t) => t.id)));
+
+const insight = pickInsight(articles);
+const latest = publishedArticles(articles).slice(0, HOME_LATEST_COUNT);
+const hot = hotTopics(articles, topics, HOME_HOT_TOPICS);
+---
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <section class="insight">
+    <p class="label">今日观点</p>
+    {insight ? (
+      <p><a href={`/articles/${insight.id}`}><strong>{insight.data.summary}</strong></a></p>
+    ) : (
+      <p class="empty">暂无观点</p>
+    )}
+  </section>
+
+  <div class="home-grid">
+    <section>
+      <h2>最新</h2>
+      <div class="card-list">
+        {latest.map((a) => <ArticleCard article={a} />)}
+      </div>
+    </section>
+    <section>
+      <h2>热门专题</h2>
+      <div class="card-list">
+        {hot.map((t) => <TopicCard topic={t} />)}
+      </div>
+    </section>
+  </div>
+
+  <section>
+    <h2>专题精选 · 知识地图</h2>
+    <p><a href="/knowledge-map">查看全部专题 →</a></p>
+    <div class="topic-grid">
+      {hot.slice(0, 4).map((t) => <TopicCard topic={t} />)}
+    </div>
+  </section>
+</BaseLayout>

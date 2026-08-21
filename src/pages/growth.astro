@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DomainPage from '../components/DomainPage.astro';
+import { SITE_TITLE } from '../consts';
+---
+<BaseLayout title={`成长 · ${SITE_TITLE}`}>
+  <DomainPage domain="growth" />
+</BaseLayout>

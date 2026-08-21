@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { SITE_TITLE } from '../../consts';
+import { articlesForTag, publishedArticles } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const published = publishedArticles(await getCollection('articles'));
+  const tags = [...new Set(published.flatMap((a) => a.data.tags))].sort();
+  return tags.map((tag) => ({ params: { tag }, props: { tag } }));
+}
+
+const { tag } = Astro.props;
+const articles = articlesForTag(await getCollection('articles'), tag);
+---
+<BaseLayout title={`#${tag} · ${SITE_TITLE}`}>
+  <p class="label">标签</p>
+  <h1>#{tag}</h1>
+  <div class="card-list">
+    {articles.map((a) => <ArticleCard article={a} />)}
+  </div>
+</BaseLayout>

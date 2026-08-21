@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../consts';
+---
+<BaseLayout title={`页面不存在 · ${SITE_TITLE}`}>
+  <h1>页面不存在</h1>
+  <p>你要找的页面不存在。可以从下面这些入口继续浏览：</p>
+  <ul>
+    <li><a href="/">首页</a></li>
+    <li><a href="/ai">AI 专区</a></li>
+    <li><a href="/english">英语专区</a></li>
+    <li><a href="/growth">成长专区</a></li>
+    <li><a href="/topics">全部专题</a></li>
+  </ul>
+</BaseLayout>

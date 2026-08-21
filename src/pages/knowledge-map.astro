@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TopicCard from '../components/TopicCard.astro';
+import { DOMAINS, DOMAIN_LABEL } from '../consts';
+import { topicsForDomain } from '../lib/content';
+
+const topics = await getCollection('topics');
+---
+<BaseLayout title="知识地图 · 知识台">
+  <h1>知识地图</h1>
+  {DOMAINS.map((domain) => {
+    const list = topicsForDomain(topics, domain);
+    return (
+      <section>
+        <h2>{DOMAIN_LABEL[domain]}</h2>
+        {list.length > 0 ? (
+          <div class="topic-grid">
+            {list.map((t) => <TopicCard topic={t} />)}
+          </div>
+        ) : (
+          <p class="empty">该域还没有专题</p>
+        )}
+      </section>
+    );
+  })}
+</BaseLayout>

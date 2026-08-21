@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../consts';
+---
+<BaseLayout title={`搜索 · ${SITE_TITLE}`} description="全文搜索知识台内容">
+  <h1>搜索</h1>
+  <div id="search"></div>
+  <p class="empty-note" style="margin-top:1rem">
+    搜索不到想看的？去 <a href="/knowledge-map">知识地图浏览专题</a>。
+  </p>
+
+  <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', function () {
+      if (window.PagefindUI) {
+        new PagefindUI({ element: '#search', showSubResults: true });
+      } else {
+        var note = document.createElement('p');
+        note.className = 'empty';
+        note.textContent = '搜索索引未生成：本地请先运行 npm run build && npm run preview 验证搜索。';
+        document.getElementById('search').appendChild(note);
+      }
+    });
+  </script>
+</BaseLayout>

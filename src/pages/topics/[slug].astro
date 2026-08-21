@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { DOMAIN_LABEL } from '../../consts';
+import { articlesForTopic } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const topics = await getCollection('topics');
+  const articles = await getCollection('articles');
+  return topics.map((t) => ({
+    params: { slug: t.id },
+    props: { topic: t, articles },
+  }));
+}
+
+const { topic, articles } = Astro.props;
+const list = articlesForTopic(articles, topic.id);
+const dateStr = topic.data.updated.toISOString().slice(0, 10);
+---
+<BaseLayout title={`${topic.data.title} · 专题`} description={topic.data.summary}>
+  <header>
+    <p class="label">专题</p>
+    <h1>{topic.data.title}</h1>
+    <p>
+      <span class="domain-badge">{DOMAIN_LABEL[topic.data.domain]}</span>
+      <span> · 更新于 <time datetime={dateStr}>{dateStr}</time> · {list.length} 篇</span>
+    </p>
+    <p>{topic.data.summary}</p>
+  </header>
+  <section>
+    {list.length > 0 ? (
+      <div class="card-list">
+        {list.map((a) => <ArticleCard article={a} />)}
+      </div>
+    ) : (
+      <p class="empty">
+        该专题暂无文章。<a href={`/${topic.data.domain}`}>去{DOMAIN_LABEL[topic.data.domain]}专区看看</a>，或
+        <a href="/topics">浏览全部专题</a>。
+      </p>
+    )}
+  </section>
+</BaseLayout>

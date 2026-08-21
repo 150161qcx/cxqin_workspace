@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TopicCard from '../../components/TopicCard.astro';
+import { SITE_TITLE } from '../../consts';
+
+const topics = await getCollection('topics');
+---
+<BaseLayout title={`专题 · ${SITE_TITLE}`}>
+  <h1>专题</h1>
+  {topics.length > 0 ? (
+    <div class="topic-grid">
+      {topics.map((t) => <TopicCard topic={t} />)}
+    </div>
+  ) : (
+    <p class="empty">还没有专题</p>
+  )}
+</BaseLayout>

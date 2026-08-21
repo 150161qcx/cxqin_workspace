@@ -1,0 +1,41 @@
+---
+import { SITE_TITLE } from '../consts';
+
+const navLinks = [
+  { href: '/ai', label: 'AI' },
+  { href: '/english', label: '英语' },
+  { href: '/growth', label: '成长' },
+  { href: '/topics', label: '专题' },
+  { href: '/search', label: '搜索' },
+];
+---
+<header class="site-header">
+  <div class="container site-header-inner">
+    <a class="brand" href="/">{SITE_TITLE}</a>
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-expanded="false"
+      aria-controls="nav-links"
+      aria-label="打开导航"
+    >
+      ☰
+    </button>
+    <nav id="nav-links" class="nav-links">
+      {navLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var toggle = document.querySelector('.nav-toggle');
+    var links = document.querySelector('.nav-links');
+    if (!toggle || !links) return;
+    toggle.addEventListener('click', function () {
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? '关闭导航' : '打开导航');
+    });
+  })();
+</script>

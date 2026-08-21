@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import ArticleCard from './ArticleCard.astro';
+import TopicCard from './TopicCard.astro';
+import { DOMAIN_LABEL, type Domain } from '../consts';
+import { articlesForDomain, topicsForDomain } from '../lib/content';
+
+type Props = { domain: Domain };
+const { domain } = Astro.props;
+
+const articles = await getCollection('articles');
+const topics = await getCollection('topics');
+
+const list = articlesForDomain(articles, domain);
+const domainTopics = topicsForDomain(topics, domain);
+---
+<h1>{DOMAIN_LABEL[domain]}专区</h1>
+
+<section>
+  <h2>专题</h2>
+  {domainTopics.length > 0 ? (
+    <div class="topic-grid">
+      {domainTopics.map((t) => <TopicCard topic={t} />)}
+    </div>
+  ) : (
+    <p class="empty">该专区还没有专题</p>
+  )}
+</section>
+
+<section>
+  <h2>文章</h2>
+  {list.length > 0 ? (
+    <div class="card-list">
+      {list.map((a) => <ArticleCard article={a} />)}
+    </div>
+  ) : (
+    <p class="empty">该专区还没有文章</p>
+  )}
+</section>

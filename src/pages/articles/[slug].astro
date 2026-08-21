@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { DOMAIN_LABEL, RELATED_ARTICLES } from '../../consts';
+import { publishedArticles, relatedArticles } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const published = publishedArticles(await getCollection('articles'));
+  return published.map((a) => ({ params: { slug: a.id }, props: { article: a } }));
+}
+
+const { article } = Astro.props;
+const all = await getCollection('articles');
+const related = relatedArticles(all, article.id, RELATED_ARTICLES);
+const { Content } = await render(article);
+const dateStr = article.data.date.toISOString().slice(0, 10);
+---
+<BaseLayout
+  title={`${article.data.title} · 知识台`}
+  description={article.data.summary}
+  lang={article.data.lang}
+>
+  <article>
+    <header>
+      <p class="label">{DOMAIN_LABEL[article.data.domain]}</p>
+      <h1>{article.data.title}</h1>
+      <p class="article-meta">
+        <time datetime={dateStr}>{dateStr}</time>
+        {article.data.topics.map((tid) => <a class="tag" href={`/topics/${tid}`}>{tid}</a>)}
+        {article.data.tags.map((t) => <a class="tag" href={`/tags/${t}`}>#{t}</a>)}
+      </p>
+    </header>
+    <div class="article-prose">
+      <Content />
+    </div>
+    {related.length > 0 && (
+      <footer>
+        <h2>相关文章</h2>
+        <ul>
+          {related.map((r) => <li><a href={`/articles/${r.id}`}>{r.data.title}</a></li>)}
+        </ul>
+      </footer>
+    )}
+  </article>
+</BaseLayout>

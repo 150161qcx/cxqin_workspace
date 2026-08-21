@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { archiveGroups } from '../lib/content';
+
+const articles = await getCollection('articles');
+const groups = archiveGroups(articles);
+---
+<BaseLayout title="归档 · 知识台">
+  <h1>归档</h1>
+  {groups.length > 0 ? (
+    groups.map((group) => (
+      <section class="archive-group">
+        <h2>{group.key}</h2>
+        <ul>
+          {group.articles.map((a) => (
+            <li>
+              <a href={`/articles/${a.id}`}>{a.data.title}</a>
+              {' — '}
+              <time datetime={a.data.date.toISOString().slice(0, 10)}>
+                {a.data.date.toISOString().slice(0, 10)}
+              </time>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  ) : (
+    <p class="empty">还没有已发布的文章</p>
+  )}
+</BaseLayout>
